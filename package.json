@@ -1,7 +1,7 @@
 {
   "name": "@jjunyjjuny/react-carousel",
   "description" : "carousel wrapper component for react",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "module": "dist/Carousel.js",
   "main": "dist/Carousel.js",
   "dependencies": {
