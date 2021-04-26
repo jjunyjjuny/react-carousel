@@ -1,7 +1,7 @@
 {
   "name": "@jjunyjjuny/react-carousel",
-  "description" : "carousel wrapper component for react",
-  "version": "0.0.3",
+  "description": "carousel wrapper component for react",
+  "version": "0.0.7",
   "module": "dist/Carousel.js",
   "main": "dist/Carousel.js",
   "dependencies": {
@@ -16,7 +16,7 @@
     "web-vitals": "^1.0.1"
   },
   "devDependencies": {
-    "@babel/core" : "^6.0.0",
+    "@babel/core": "^6.0.0",
     "@babel/cli": "^7.10.5",
     "@babel/preset-react": "^7.10.4"
   },
