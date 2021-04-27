@@ -1,4 +1,4 @@
-import carouselContext from "./lib/Carousel.v3";
+import carouselContext from "./lib/Carousel.v2";
 import styled from "styled-components";
 const testArray = [
   { id: 1, text: "test1" },
@@ -14,26 +14,34 @@ const testArray = [
   { id: 11, text: "test11" },
   { id: 12, text: "test12" },
 ];
-const { Carousel, PrevButton, NextButton } = carouselContext;
+const { Carousel, Controller } = carouselContext;
 function App() {
   return (
     <TestWrapper>
-      <PrevButton carouselId={1}></PrevButton>
-      <Carousel itemsPerPeice={3} autoFit carouselId={1}>
-        {testArray.map((el) => (
-          <TestBlock>
-            <h2>{el.id}</h2>
-            <div>{el.text}</div>
-          </TestBlock>
-        ))}
-      </Carousel>
-      <NextButton carouselId={1}></NextButton>
+      <TestCarouselBlock>
+        <Carousel itemsPerPeice={5} autoFit carouselId={1}>
+          {testArray.map((el) => (
+            <TestBlock>
+              <h2>{el.id}</h2>
+              <div>{el.text}</div>
+            </TestBlock>
+          ))}
+        </Carousel>
+        <Controller carouselId={1} prev />
+      </TestCarouselBlock>
+      <Controller carouselId={1} next />
     </TestWrapper>
   );
 }
 const TestWrapper = styled.div`
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  /* justify-content: center; */
+  /* align-items: center; */
+`;
+const TestCarouselBlock = styled.div`
+  width: 400px;
 `;
 const TestBlock = styled.div``;
 export default App;
