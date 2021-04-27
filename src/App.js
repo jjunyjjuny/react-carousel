@@ -27,9 +27,27 @@ function App() {
             </TestBlock>
           ))}
         </Carousel>
+        <Carousel itemsPerPeice={5} autoFit customMode carouselId={4}>
+          {testArray.map((el) => (
+            <TestBlock>
+              <h2>{el.id}</h2>
+              <div>{el.text}</div>
+            </TestBlock>
+          ))}
+        </Carousel>
+        <Carousel itemsPerPeice={5} autoFit customMode carouselId={2}>
+          {testArray.map((el) => (
+            <TestBlock>
+              <h2>{el.id}</h2>
+              <div>{el.text}</div>
+            </TestBlock>
+          ))}
+        </Carousel>
       </TestCarouselBlock>
-      <Controller carouselId={1} prev />
-      <Controller carouselId={1} next />
+      <Controller carouselId={4} prev />
+      <Controller carouselId={4} next />
+      <Controller carouselId={2} prev />
+      <Controller carouselId={2} next />
     </TestWrapper>
   );
 }
