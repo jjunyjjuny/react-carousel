@@ -19,7 +19,7 @@ function App() {
   return (
     <TestWrapper>
       <TestCarouselBlock>
-        <Carousel itemsPerPeice={5} autoFit carouselId={1}>
+        <Carousel itemsPerPeice={5} autoFit>
           {testArray.map((el) => (
             <TestBlock>
               <h2>{el.id}</h2>
@@ -27,8 +27,8 @@ function App() {
             </TestBlock>
           ))}
         </Carousel>
-        <Controller carouselId={1} prev />
       </TestCarouselBlock>
+      <Controller carouselId={1} prev />
       <Controller carouselId={1} next />
     </TestWrapper>
   );
