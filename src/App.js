@@ -6,13 +6,15 @@ const testArray = [
   { id: 3, text: "test3" },
   { id: 4, text: "test4" },
   { id: 5, text: "test5" },
+  { id: 6, text: "test6" },
+  
 ];
 const { Carousel, Controller } = carouselContext;
 function App() {
   return (
     <TestWrapper>
       <TestCarouselBlock>
-        <Carousel itemsPerPeice={2} gap={"10px"}>
+        <Carousel itemsPerPeice={3} autoFit gap={"10px"}>
           {testArray.map((el) => (
             <TestBlock>
               <h2>{el.id}</h2>
@@ -20,7 +22,7 @@ function App() {
             </TestBlock>
           ))}
         </Carousel>
-        <Carousel itemsPerPeice={5} autoFit customMode carouselId={4}>
+        <Carousel itemsPerPeice={3} autoFit customMode carouselId={4}>
           {testArray.map((el) => (
             <TestBlock>
               <h2>{el.id}</h2>
