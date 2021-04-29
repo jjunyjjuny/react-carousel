@@ -1,4 +1,4 @@
-import carouselContext from "./lib/Carousel.v2";
+import carouselContext from "./lib/Carousel";
 import styled from "styled-components";
 const testArray = [
   { id: 1, text: "test1" },
@@ -6,20 +6,13 @@ const testArray = [
   { id: 3, text: "test3" },
   { id: 4, text: "test4" },
   { id: 5, text: "test5" },
-  { id: 6, text: "test6" },
-  { id: 7, text: "test7" },
-  { id: 8, text: "test8" },
-  { id: 9, text: "test9" },
-  { id: 10, text: "test10" },
-  { id: 11, text: "test11" },
-  { id: 12, text: "test12" },
 ];
 const { Carousel, Controller } = carouselContext;
 function App() {
   return (
     <TestWrapper>
       <TestCarouselBlock>
-        <Carousel itemsPerPeice={5} autoFit>
+        <Carousel itemsPerPeice={2} gap={"10px"}>
           {testArray.map((el) => (
             <TestBlock>
               <h2>{el.id}</h2>
@@ -55,8 +48,6 @@ const TestWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* justify-content: center; */
-  /* align-items: center; */
 `;
 const TestCarouselBlock = styled.div`
   width: 400px;

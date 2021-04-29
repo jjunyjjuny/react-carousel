@@ -1,28 +1,24 @@
 {
   "name": "@jjunyjjuny/react-carousel",
   "description": "carousel wrapper component for react",
-  "version": "0.0.7",
+  "version": "1.0.4",
   "module": "dist/Carousel.js",
   "main": "dist/Carousel.js",
   "dependencies": {
-    "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "^11.1.0",
-    "@testing-library/user-event": "^12.1.10",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-icons": "^4.2.0",
     "react-scripts": "4.0.3",
-    "styled-components": "^5.2.3",
-    "web-vitals": "^1.0.1"
+    "styled-components": "^5.2.3"
   },
   "devDependencies": {
-    "@babel/core": "^6.0.0",
     "@babel/cli": "^7.10.5",
+    "@babel/preset-env": "^7.13.15",
     "@babel/preset-react": "^7.10.4"
   },
   "babel": {
     "presets": [
-      "@babel/preset-react"
+      "@babel/preset-react", "@babel/preset-env"
     ]
   },
   "scripts": {
@@ -34,8 +30,7 @@
   },
   "eslintConfig": {
     "extends": [
-      "react-app",
-      "react-app/jest"
+      "react-app"
     ]
   },
   "browserslist": {
