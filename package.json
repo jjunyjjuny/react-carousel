@@ -1,7 +1,7 @@
 {
   "name": "@jjunyjjuny/react-carousel",
   "description": "carousel wrapper component for react",
-  "version": "1.0.4",
+  "version": "1.0.7",
   "module": "dist/Carousel.js",
   "main": "dist/Carousel.js",
   "dependencies": {
@@ -32,6 +32,10 @@
     "extends": [
       "react-app"
     ]
+  },
+  "repository":{
+    "type": "git",
+    "url":"https://github.com/jjunyjjuny/react-carousel"
   },
   "browserslist": {
     "production": [

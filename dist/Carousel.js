@@ -45,6 +45,7 @@ var carouselContext = function carouselContext() {
   var _carouselDatas = {};
   var _moveControllers = {};
   var transitionDefault = "all .5s";
+  var xDefault = -100;
 
   var Carousel = function Carousel(props) {
     var carouselId = props.carouselId,
@@ -67,7 +68,7 @@ var carouselContext = function carouselContext() {
         slides = _useState2[0],
         setSlides = _useState2[1];
 
-    var _useState3 = (0, _react.useState)(-100),
+    var _useState3 = (0, _react.useState)(slideList.length > 1 ? xDefault : "0"),
         _useState4 = _slicedToArray(_useState3, 2),
         x = _useState4[0],
         setX = _useState4[1];
@@ -82,8 +83,36 @@ var carouselContext = function carouselContext() {
         trasitionValue = _useState8[0],
         setTransitionValue = _useState8[1];
 
+    var _useState9 = (0, _react.useState)(0),
+        _useState10 = _slicedToArray(_useState9, 2),
+        dir = _useState10[0],
+        setDir = _useState10[1];
+
     var onMove = function onMove(direction) {
       if (moving) return;
+
+      if (direction === -1 && x === -(slideList.length - 1) * 100) {
+        setSlides(function (slides) {
+          console.log(1);
+          var slide = slides.shift();
+          return [].concat(_toConsumableArray(slides), [slide]);
+        });
+        setTransitionValue("none");
+        setX(0);
+        setDir(direction);
+        return;
+      } else if (direction === 1 && x === 0) {
+        setSlides(function (slides) {
+          console.log(2);
+          var slide = slides.pop();
+          return [slide].concat(_toConsumableArray(slides));
+        });
+        setTransitionValue("none");
+        setX(-100);
+        setDir(direction);
+        return;
+      }
+
       setX(function (prevX) {
         return prevX + direction * 100;
       });
@@ -94,7 +123,6 @@ var carouselContext = function carouselContext() {
 
     var onTransitionEnd = function onTransitionEnd() {
       setMoving(false);
-      console.log(x, -(slideList.length - 1) * 100);
 
       if (x === -(slideList.length - 1) * 100) {
         setTransitionValue("none");
@@ -106,6 +134,7 @@ var carouselContext = function carouselContext() {
       } else if (x === 0) {
         setTransitionValue("none");
         setSlides(function (slides) {
+          console.log(4);
           var slide = slides.pop();
           return [slide].concat(_toConsumableArray(slides));
         });
@@ -114,6 +143,11 @@ var carouselContext = function carouselContext() {
     };
 
     (0, _react.useEffect)(function () {
+      if (dir !== 0) {
+        onMove(dir);
+        setDir(0);
+      }
+
       if (trasitionValue === "none") setTransitionValue(transitionDefault);
     }, [x]);
     var ulStyles = {
@@ -160,8 +194,6 @@ var carouselContext = function carouselContext() {
   var Controller = function Controller(_ref) {
     var children = _ref.children,
         carouselId = _ref.carouselId,
-        _ref$style = _ref.style,
-        style = _ref$style === void 0 ? {} : _ref$style,
         _ref$prev = _ref.prev,
         prev = _ref$prev === void 0 ? false : _ref$prev,
         _ref$next = _ref.next,
@@ -178,7 +210,6 @@ var carouselContext = function carouselContext() {
     var direction = prev ? 1 : next ? -1 : 0;
     var button = children !== null && children !== void 0 ? children : prev ? /*#__PURE__*/_react.default.createElement(_hi.HiOutlineChevronLeft, null) : next ? /*#__PURE__*/_react.default.createElement(_hi.HiOutlineChevronRight, null) : "";
     return /*#__PURE__*/_react.default.createElement(Button, {
-      style: style,
       onClick: function onClick() {
         return _moveControllers[carouselId](direction);
       }
@@ -273,7 +304,7 @@ var Panel = _styledComponents.default.ul(_templateObject5 || (_templateObject5 =
   return "".concat(gap);
 });
 
-var Item = _styledComponents.default.li(_templateObject6 || (_templateObject6 = _taggedTemplateLiteral(["\n  list-style-type: none;\n  background: tan;\n  ", "\n"])), function (_ref5) {
+var Item = _styledComponents.default.li(_templateObject6 || (_templateObject6 = _taggedTemplateLiteral(["\n  list-style-type: none;\n  ", "\n"])), function (_ref5) {
   var autoFit = _ref5.autoFit,
       itemsPerPeice = _ref5.itemsPerPeice,
       gap = _ref5.gap;

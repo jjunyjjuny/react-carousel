@@ -1,6 +1,8 @@
 
 ## Warning! 
-I am practicing npm publish right now. There may be an error, so be careful when using it.... thank you!! 
+- I am practicing npm publish right now. There may be an error, so be careful when using it.... 
+- **Do not use this with StrictMode!!!!!!**
+- Thank you for your attention!!
 
 # react-carousel
 
