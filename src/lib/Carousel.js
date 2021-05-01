@@ -1,97 +1,84 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled, { css } from "styled-components";
 import { HiOutlineChevronLeft, HiOutlineChevronRight } from "react-icons/hi";
 
-const carouselContext = () => {
-  const _carouselDatas = {};
-  const _moveControllers = {};
-  const transitionDefault = "all .5s";
-  const xDefault = -100;
-  const Carousel = (props) => {
-    const { carouselId, customMode } = props;
-    const state = _getData(props, carouselId);
-    const { children: items, itemsPerPeice = 1, autoFit = false } = state;
-    const { gap = autoFit ? "0.5rem" : "0rem" } = state;
-    const slideList = _createSlideList(items, itemsPerPeice);
-    const [slides, setSlides] = useState(slideList);
-    const [x, setX] = useState(slideList.length > 1 ? xDefault : "0");
+const DEFAULT_X = -100;
+const DEFAULT_TRANSITION = "all .5s";
+
+const _carouselModule = () => {
+  const _collectionOfCarouselMover = {};
+
+  const Carousel = ({
+    children: items,
+    itemCountPerPanel,
+    carouselId,
+    customMode,
+    gap = "0.5rem",
+    loop,
+    autoPlay,
+    interval,
+    dot,
+  }) => {
+    const virtualPanelList = _cretaeVirtualPanelList(items, itemCountPerPanel);
+    const [panelList, setPanelList] = useState(() => {
+      const initialPanelList = _createPanelList(virtualPanelList);
+      return initialPanelList;
+    });
+    const index = useRef(0);
+    const [x, setX] = useState(panelList.length > 1 ? DEFAULT_X : 0);
     const [moving, setMoving] = useState(false);
-    const [trasitionValue, setTransitionValue] = useState(transitionDefault);
-    const [dir, setDir] = useState(0);
+    const [transitionValue, setTransitionValue] = useState("none");
+    const [currentDirection, setCurrentDirection] = useState(0);
+    const panelCount = virtualPanelList.length;
 
-    const onMove = (direction) => {
+    const onMove = (directionValue) => {
       if (moving) return;
-      if (direction === -1 && x === -(slideList.length - 1) * 100) {
-        setSlides((slides) => {
-          console.log(1);
-          const slide = slides.shift();
-          return [...slides, slide];
-        });
-        setTransitionValue("none");
-        setX(0);
-        setDir(direction);
-        return;
-      } else if (direction === 1 && x === 0) {
-        setSlides((slides) => {
-          console.log(2);
-          const slide = slides.pop();
-          return [slide, ...slides];
-        });
-        setTransitionValue("none");
-        setX(-100);
-        setDir(direction);
-        return;
-      }
-      setX((prevX) => prevX + direction * 100);
+      index.current = getMovedIndex(directionValue);
+      const targetIndex = getMovedIndex(directionValue);
+
       setMoving(true);
+      setCurrentDirection(directionValue);
+      setPanelList((panelList) =>
+        directionValue > 0
+          ? [...panelList, virtualPanelList[targetIndex]]
+          : [virtualPanelList[targetIndex], ...panelList]
+      );
+      if (directionValue === -1) {
+        setX(-200);
+      }
     };
-
-    _setController(carouselId, onMove);
-
+    _addMover(carouselId, onMove);
+    useEffect(() => {
+      if (currentDirection !== 0) {
+        setTransitionValue(DEFAULT_TRANSITION);
+        setX((prevX) => prevX + currentDirection * DEFAULT_X);
+        setCurrentDirection(0);
+      }
+    }, [currentDirection]);
+    
+    const getMovedIndex = (directionValue) => {
+      return (panelCount + directionValue + index.current) % panelCount;
+    };
     const onTransitionEnd = () => {
       setMoving(false);
-      if (x === -(slideList.length - 1) * 100) {
-        setTransitionValue("none");
-        setSlides((slides) => {
-          const slide = slides.shift();
-          return [...slides, slide];
-        });
-        setX(-(slideList.length - 1) * 100 + 100);
-      } else if (x === 0) {
-        setTransitionValue("none");
-        setSlides((slides) => {
-          console.log(4);
-          const slide = slides.pop();
-          return [slide, ...slides];
-        });
-        setX(-100);
-      }
+      setTransitionValue("none");
+      setPanelList((panelList) => {
+        const resultList = [...panelList];
+        if (x === DEFAULT_X) {
+          resultList.pop();
+        } else if (x === -200) {
+          resultList.shift();
+          setX(DEFAULT_X);
+        }
+        return resultList;
+      });
     };
-
-    useEffect(() => {
-      if (dir !== 0) {
-        onMove(dir);
-        setDir(0);
-      }
-      if (trasitionValue === "none") setTransitionValue(transitionDefault);
-    }, [x]);
-
-    const ulStyles = {
-      transform: `translate3d(${x}%, 0, 0)`,
-      transition: trasitionValue,
-      display: "flex",
-    };
-    const renderList = (list) => {
-      return list.map((slide, index) => {
+    const renderPanelList = () => {
+      return panelList.map((panel, index) => {
         return (
           <Panel key={index} gap={gap}>
-            {slide.map((item, index) => (
-              <Item
-                key={index}
-                autoFit={autoFit}
-                itemsPerPeice={itemsPerPeice}
-                gap={gap}
-              >
+            {panel.map((item, index) => (
+              <Item key={index} {...{ gap, itemCountPerPanel }}>
                 {item}
               </Item>
             ))}
@@ -99,20 +86,21 @@ const carouselContext = () => {
         );
       });
     };
+
     return (
       <Wrapper customMode={customMode}>
         {!customMode && (
-          <Button prev onClick={() => onMove(+1)}>
+          <Button prev onClick={() => onMove(-1)}>
             <HiOutlineChevronLeft />
           </Button>
         )}
         <CarouselContainer>
-          <Slider gap={gap} style={ulStyles} onTransitionEnd={onTransitionEnd}>
-            {renderList(slides)}
+          <Slider {...{ onTransitionEnd, x, transitionValue, gap }}>
+            {renderPanelList()}
           </Slider>
         </CarouselContainer>
         {!customMode && (
-          <Button next onClick={() => onMove(-1)}>
+          <Button next onClick={() => onMove(+1)}>
             <HiOutlineChevronRight />
           </Button>
         )}
@@ -131,96 +119,97 @@ const carouselContext = () => {
         "MissingRequiredPropertyError: you have to pass carouselId to the controller."
       );
     }
-    const direction = prev ? 1 : next ? -1 : 0;
+    const direction = prev ? -1 : next ? 1 : 0;
     const button =
       children ??
       (prev ? <HiOutlineChevronLeft /> : next ? <HiOutlineChevronRight /> : "");
     return (
-      <Button onClick={() => _moveControllers[carouselId](direction)}>
+      <Button onClick={() => _collectionOfCarouselMover[carouselId](direction)}>
         {button}
       </Button>
     );
   };
-
-  const _setController = (id, move) => {
-    _moveControllers[id] = move;
+  const Counter = () => {
+    return <div></div>;
   };
-  const _getData = (props, targetId) => {
-    const { customMode, children: items, itemsPerPeice, autoFit, gap } = props;
-    const data = { children: items, itemsPerPeice, autoFit, gap };
-
-    if (!customMode) {
-      return data;
+  const _getTargetIndex = (panelCount, directionValue, currentIndex) => {
+    return Math.abs(
+      panelCount + ((Math.abs(currentIndex) + directionValue * 2) % panelCount)
+    );
+  };
+  const _addMover = (targetId, mover) => {
+    _collectionOfCarouselMover[targetId] = mover;
+  };
+  const _cretaeVirtualPanelList = (items, countPer) => {
+    if (!Array.isArray(items)) {
+      return [items];
     }
-    if (_isThereCarouselData(targetId)) {
-      return _getCarouselData(targetId);
+    if (items.length === 0) {
+      return Array.from({ length: countPer }, () => ALT_COMPONENT);
+    }
+    return items.reduce((list, item, index) => {
+      const [i, j] = _divmod(index, countPer);
+      list[i] ? (list[i][j] = item) : (list[i] = [item]);
+      return list;
+    }, []);
+  };
+  const _createPanelList = (virtualPanelList) => {
+    const len = virtualPanelList.length;
+    const last = virtualPanelList[len - 1];
+    if (len === 1) {
+      return virtualPanelList;
+    } else if (len === 2) {
+      return [last, ...virtualPanelList];
     } else {
-      _setData(data, targetId);
-      return data;
+      return [last, ...virtualPanelList.slice(0, 2)];
     }
   };
-  const _setData = (data, id) => {
-    _carouselDatas[id] = data;
-  };
-  const _isThereCarouselData = (targetId) => {
-    return targetId in _carouselDatas;
-  };
-  const _getCarouselData = (targetId) => {
-    return _carouselDatas[targetId];
-  };
 
-  return { Carousel, Controller };
+  return { Carousel, Controller, Counter };
 };
-
-const _createSlideList = (items, itemsPerPeice) => {
-  if (!Array.isArray(items)) {
-    return [items];
-  }
-  if (items.length === 0) return [];
-  const newItems = items.reduce((result, item, index) => {
-    const [i, j] = _divmod(index, itemsPerPeice);
-    result[i] ? (result[i][j] = item) : (result[i] = [item]);
-    return result;
-  }, []);
-  newItems.unshift(newItems.pop());
-  return newItems;
-};
-
 const _divmod = (a, b) => {
   return [parseInt(a / b), a % b];
 };
 const Wrapper = styled.div`
+  width: 100%;
   ${({ customMode }) =>
     !customMode &&
     css`
       display: flex;
       align-items: center;
+      flex-direction: column;
     `}
 `;
 const CarouselContainer = styled.div`
-  overflow: hidden;
+  width: 100%;
+  /* overflow: hidden; */
 `;
 const Slider = styled.div`
-  display: flex;
   width: 100%;
-  padding-right: ${({ gap }) => `${gap}`};
+  ${({ x, transitionValue, gap }) => css`
+    transform: ${`translate3d(${x}%, 0, 0)`};
+    transition: ${transitionValue};
+    padding-right: ${gap};
+  `}
+  display: flex;
 `;
 const Panel = styled.ul`
+  width: 100%;
   margin: 0;
   display: flex;
-  width: 100%;
   flex: 1 0 auto;
   padding: 0;
-  margin-right: ${({ gap }) => {
-    return `${gap}`;
+  ${({ gap }) => {
+    return css`
+      padding-right: ${gap};
+    `;
   }};
 `;
 const Item = styled.li`
   list-style-type: none;
-  ${({ autoFit, itemsPerPeice, gap }) =>
-    autoFit &&
+  ${({ itemCountPerPanel, gap }) =>
     css`
-      width: ${autoFit ? `calc(100%/${itemsPerPeice})` : "auto"};
+      width: ${`calc(100%/${itemCountPerPanel})`};
       & + & {
         margin-left: ${gap};
       }
@@ -229,5 +218,23 @@ const Item = styled.li`
 const Button = styled.div`
   font-size: 2rem;
 `;
+const ALT_COMPONENT = styled.div`
+  background: tan;
+`;
+const { Carousel, Controller, Counter } = _carouselModule();
 
-export default carouselContext();
+export { Controller, Counter };
+export default Carousel;
+
+// const _idExistInCollection = (targetId) => {
+//   return targetId in _collectionOfCarouselProps;
+// };
+// const _isDiffProps = (targetId, nextProps) => {
+//   const prevProps = _getCarouselProps(targetId);
+//   // 구체적인 비교 로직은 이후에
+//   return prevProps === nextProps;
+// };
+// const _getCarouselProps = (targetId) => {
+//   return _collectionOfCarouselProps[targetId];
+// };
+// const _setPropsInCollect = (targetId, props) => {};
