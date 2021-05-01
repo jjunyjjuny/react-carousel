@@ -1,7 +1,7 @@
 {
   "name": "@jjunyjjuny/react-carousel",
   "description": "carousel wrapper component for react",
-  "version": "1.0.7",
+  "version": "1.1.1",
   "module": "dist/Carousel.js",
   "main": "dist/Carousel.js",
   "dependencies": {
@@ -26,7 +26,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "publish:npm": "rm -rf dist && mkdir dist && babel src/lib -d dist --copy-files"
+    "babeling": "rm -rf dist && mkdir dist && babel src/lib -d dist --copy-files"
   },
   "eslintConfig": {
     "extends": [

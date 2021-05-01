@@ -55,7 +55,7 @@ const _carouselModule = () => {
         setCurrentDirection(0);
       }
     }, [currentDirection]);
-    
+
     const getMovedIndex = (directionValue) => {
       return (panelCount + directionValue + index.current) % panelCount;
     };
@@ -132,11 +132,6 @@ const _carouselModule = () => {
   const Counter = () => {
     return <div></div>;
   };
-  const _getTargetIndex = (panelCount, directionValue, currentIndex) => {
-    return Math.abs(
-      panelCount + ((Math.abs(currentIndex) + directionValue * 2) % panelCount)
-    );
-  };
   const _addMover = (targetId, mover) => {
     _collectionOfCarouselMover[targetId] = mover;
   };
@@ -182,7 +177,7 @@ const Wrapper = styled.div`
 `;
 const CarouselContainer = styled.div`
   width: 100%;
-  /* overflow: hidden; */
+  overflow: hidden;
 `;
 const Slider = styled.div`
   width: 100%;
@@ -225,16 +220,3 @@ const { Carousel, Controller, Counter } = _carouselModule();
 
 export { Controller, Counter };
 export default Carousel;
-
-// const _idExistInCollection = (targetId) => {
-//   return targetId in _collectionOfCarouselProps;
-// };
-// const _isDiffProps = (targetId, nextProps) => {
-//   const prevProps = _getCarouselProps(targetId);
-//   // 구체적인 비교 로직은 이후에
-//   return prevProps === nextProps;
-// };
-// const _getCarouselProps = (targetId) => {
-//   return _collectionOfCarouselProps[targetId];
-// };
-// const _setPropsInCollect = (targetId, props) => {};

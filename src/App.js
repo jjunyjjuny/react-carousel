@@ -1,42 +1,67 @@
-import carouselContext from "./lib/Carousel";
+import Carousel, { Controller } from "./lib/Carousel.js";
 import styled from "styled-components";
-const testArray = [
-  { id: 1, text: "test1" },
-  { id: 2, text: "test2" },
-  { id: 3, text: "test3" },
-  { id: 4, text: "test4" },
-  { id: 5, text: "test5" },
-  { id: 6, text: "test6" },
-  { id: 7, text: "test7" },
-  { id: 8, text: "test8" },
+import CarouselSample from "./lib/CarouselSample";
+const sampleArray = [
+  { id: 0, text: "Sample0" },
+  { id: 1, text: "Sample1" },
+  { id: 2, text: "Sample2" },
+  { id: 3, text: "Sample3" },
+  { id: 4, text: "Sample4" },
+  { id: 5, text: "Sample5" },
 ];
-const { Carousel, Controller } = carouselContext;
 
 function App() {
   return (
-    <TestWrapper>
-      <TestCarouselBlock>
-        <Carousel itemsPerPeice={4} autoFit customMode carouselId={4}>
-          {testArray.map((el) => (
-            <TestBlock>
-              <h2>{el.id}</h2>
-              <div>{el.text}</div>
-            </TestBlock>
-          ))}
-        </Carousel>
-      </TestCarouselBlock>
-      <Controller carouselId={4} prev />
-      <Controller carouselId={4} next />
-    </TestWrapper>
+    <>
+      {/* <SampleWrapper>
+        <SampleCarouselBlock>
+          <Carousel
+            itemCountPerPanel={1}
+            customMode
+            carouselId={4}
+            gap={"10px"}
+          >
+            {sampleArray.map((el) => (
+              <SampleBlock key={el.id}>
+                <h2>{el.id}</h2>
+                <div>{el.text}</div>
+              </SampleBlock>
+            ))}
+          </Carousel>
+          <Controller prev carouselId={4} />
+          <Controller next carouselId={4} />
+        </SampleCarouselBlock>
+        <SampleCarouselBlock>
+          <Carousel
+            itemCountPerPanel={1}
+            customMode
+            carouselId={2}
+            gap={"10px"}
+          >
+            {sampleArray.map((el) => (
+              <SampleBlock key={el.id}>
+                <h2>{el.id}</h2>
+                <div>{el.text}</div>
+              </SampleBlock>
+            ))}
+          </Carousel>
+          <Controller prev carouselId={2} />
+          <Controller next carouselId={2} />
+        </SampleCarouselBlock>
+      </SampleWrapper> */}
+      <CarouselSample />
+    </>
   );
 }
-const TestWrapper = styled.div`
+const SampleWrapper = styled.div`
+  width: 1000px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
 `;
-const TestCarouselBlock = styled.div`
-  width: 400px;
+const SampleCarouselBlock = styled.div`
+  width: 100px;
 `;
-const TestBlock = styled.div``;
+const SampleBlock = styled.div``;
 export default App;
