@@ -1,7 +1,7 @@
 {
   "name": "@jjunyjjuny/react-carousel",
   "description": "carousel wrapper component for react",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "module": "dist/Carousel.js",
   "main": "dist/Carousel.js",
   "dependencies": {
@@ -48,5 +48,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "keywords": ["react", "carousel", "slider"]
 }

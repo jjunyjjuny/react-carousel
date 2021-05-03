@@ -2,27 +2,39 @@
 
 - I am practicing npm publish right now. There may be an error, so be careful when using it....
 
-- I plan to add function loop or not, autoplay, dot or number counter ... 
+- I plan to add function loop or not, autoplay, dot or number counter ...
 
 - Thank you for your attention!!
 
 <br/>
 
-# react-carousel
+# 🎠 react-carousel
 
 this library make list into carousel in React
+
 <br/>
 
-## Installation
+## 🔲Sample 
+
+![carousel2](https://user-images.githubusercontent.com/41738385/116840924-912d8380-ac12-11eb-9445-bdc678faa781.gif)
+
+![carousel3](https://user-images.githubusercontent.com/41738385/116840940-a0143600-ac12-11eb-9d1f-866fe68476fd.gif)
+
+
+<br/>
+
+## 🚀 Installation
 
 Using npm :
 
 ```
 $ npm i @jjunyjjuny/react-carousel
 ```
+
 <br/>
 
 ## Usage with styled-components
+
 <br/>
 
 ### default
@@ -34,20 +46,23 @@ import Carousel from "@jjunyjjuny/react-carousel";
 const Container = styled.div`
   margin: 0 auto;
   margin-top: 100px;
-  width: 500px;
+  width: 480px;
 `;
 const Item = styled.div`
-  height: 50px;
-  box-sizing: border-box;
+  background: #dbe4ff;
+  text-align: center;
+  font-size: 2rem;
+  line-height: 145px;
+  height: 150px;
+  border-radius: 10px;
 `;
+
 const sampleArray = [1, 2, 3, 4, 6, 7, 8];
 const CarouselSample = () => {
   return (
     <Container>
-      <h2>Sample</h2>
-      <Carousel
-        itemCountPerPanel={3}
-      >
+      <h2 style={{ textAlign: "center" }}>Sample Carousel</h2>
+      <Carousel itemCountPerPanel={3}>
         {sampleArray.map((el) => (
           <Item>{el}</Item>
         ))}
@@ -55,51 +70,60 @@ const CarouselSample = () => {
     </Container>
   );
 };
+
+export default CarouselSample;
 ```
+
 <br/>
 
 ### customMode
 
 ```
 import styled from "styled-components";
-import Carousel, { Controller} from "@jjunyjjuny/react-carousel";
+import Carousel, { Controller } from "@jjunyjjuny/react-carousel";
 
 const Container = styled.div`
   margin: 0 auto;
   margin-top: 100px;
-  width: 500px;
+  width: 480px;
 `;
 const Item = styled.div`
-  height: 50px;
-  box-sizing: border-box;
+  background: #dbe4ff;
+  text-align: center;
+  font-size: 2rem;
+  line-height: 145px;
+  height: 150px;
+  border-radius: 10px;
+`;
+const ControllerBox = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
 `;
 const sampleArray = [1, 2, 3, 4, 6, 7, 8];
 const CarouselSample = () => {
   return (
     <Container>
-      <h2>Sample</h2>
-      <Controller prev carouselId={1}/>
-      <Carousel
-        carouselId={1}
-        customMode
-        itemCountPerPanel={3}
-        gap={"10px"}
-      >
+      <h2 style={{ textAlign: "center" }}>Sample customMode</h2>
+      <Carousel itemCountPerPanel={3} customMode carouselId={"jjunyjjuny"}>
         {sampleArray.map((el) => (
           <Item>{el}</Item>
         ))}
       </Carousel>
-      <Controller next carouselId={1}/>
-      <Controller next carouselId={1}>
-        <YourOwnButton/>
-      </Controller>
+      <ControllerBox>
+        <Controller prev carouselId={"jjunyjjuny"} />
+        <Controller next carouselId={"jjunyjjuny"} />
+      </ControllerBox>
     </Container>
   );
 };
+
+export default CarouselSample;
 ```
+
 <br/>
 
-## props
+## 📃 props
 
 <br/>
 
@@ -120,4 +144,4 @@ const CarouselSample = () => {
 | :--------: | :------------: | :------------------------------------------------------------: |
 | carouselId | primitive type | The ID value of the carousel to which the controller will move |
 | prev, next |    boolean     |      Direction in which the controller moves the carousel      |
-| children |    Component, jsx     |      if you want your own button, insert it as children      |
+|  children  | Component, jsx |       if you want your own button, insert it as children       |

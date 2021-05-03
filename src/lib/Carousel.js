@@ -172,7 +172,6 @@ const Wrapper = styled.div`
     css`
       display: flex;
       align-items: center;
-      flex-direction: column;
     `}
 `;
 const CarouselContainer = styled.div`
